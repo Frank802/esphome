@@ -16,12 +16,11 @@
 
 #include <esp_gattc_api.h>
 
-static const uint8_t MAX_CHUNK_SIZE = 20;
-static const uint8_t BLE_SEND_MAX_RETRIES = 5;
-
 namespace esphome {
 namespace madoka_vam {
 
+static const uint8_t MAX_CHUNK_SIZE = 20;
+static const uint8_t BLE_SEND_MAX_RETRIES = 5;
 static const char *const TAG = "madoka_vam";
 
 using chunk = std::vector<uint8_t>;
