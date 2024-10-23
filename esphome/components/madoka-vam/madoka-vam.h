@@ -90,7 +90,7 @@ class MadokaVam : public climate::Climate, public esphome::ble_client::BLEClient
     });
     traits.set_supported_fan_modes({
         climate::CLIMATE_FAN_LOW,
-        climate::CLIMATE_FAN_AUTO,
+        climate::CLIMATE_FAN_HIGH,
     });
     traits.set_supports_current_temperature(true);
     return traits;
