@@ -1,1 +1,1 @@
-CODEOWNERS = ["@frank802"]
+CODEOWNERS = ["@Frank802"]
