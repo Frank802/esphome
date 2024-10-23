@@ -1,4 +1,4 @@
-#include "madoka-vam.h"
+#include "madoka_vam.h"
 
 #include "esphome/core/log.h"
 #include <utility>
@@ -6,7 +6,7 @@
 #ifdef USE_ESP32
 
 namespace esphome {
-namespace madoka-vam {
+namespace madoka_vam {
 
 using namespace esphome::climate;
 

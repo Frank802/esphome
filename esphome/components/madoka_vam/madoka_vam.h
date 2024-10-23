@@ -20,9 +20,9 @@ static const uint8_t MAX_CHUNK_SIZE = 20;
 static const uint8_t BLE_SEND_MAX_RETRIES = 5;
 
 namespace esphome {
-namespace madoka-vam {
+namespace madoka_vam {
 
-static const char *const TAG = "madoka-vam";
+static const char *const TAG = "madoka_vam";
 
 using chunk = std::vector<uint8_t>;
 using message = std::vector<uint8_t>;
