@@ -3,18 +3,18 @@ import esphome.config_validation as cv
 from esphome.components import climate, ble_client
 from esphome.const import CONF_ID
 
-CODEOWNERS = ["@Petapton"]
+CODEOWNERS = ["@Frank802"]
 DEPENDENCIES = ["ble_client"]
 
-madoka_ns = cg.esphome_ns.namespace("madoka")
-Madoka = madoka_ns.class_(
-    "Madoka", climate.Climate, ble_client.BLEClientNode, cg.PollingComponent
+madoka_vam_ns = cg.esphome_ns.namespace("madoka_vam")
+MadokaVam = madoka_vam_ns.class_(
+    "MadokaVam", climate.Climate, ble_client.BLEClientNode, cg.PollingComponent
 )
 
 CONFIG_SCHEMA = (
     climate.CLIMATE_SCHEMA.extend(
         {
-            cv.GenerateID(): cv.declare_id(Madoka),
+            cv.GenerateID(): cv.declare_id(MadokaVam),
         }
     )
     .extend(ble_client.BLE_CLIENT_SCHEMA)
