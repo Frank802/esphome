@@ -302,6 +302,7 @@ void MadokaVam::parse_cb_(message msg) {
           case 2:
           case 3:
           case 4:
+          case 5:
             this->mode = climate::CLIMATE_MODE_FAN_ONLY;
             break;
         }
