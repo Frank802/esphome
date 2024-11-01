@@ -45,7 +45,7 @@ void MadokaVam::control(const ClimateCall &call) {
         break;
       case climate::CLIMATE_MODE_FAN_ONLY:
         status_out = 1;
-        mode_out = 0;
+        mode_out = 5; // VENTILATION not covereb by climate enum of esphome
         break;
       default:
         ESP_LOGW(TAG, "Unsupported mode: %d", mode);
@@ -297,12 +297,7 @@ void MadokaVam::parse_cb_(message msg) {
       // ESP_LOGI(TAG, "status: %d, mode: %d", this->cur_status_.status, this->cur_status_.mode);
       if (this->cur_status_.status) {
         switch (this->cur_status_.mode) {
-          case 0:
-          case 1:
-          case 2:
-          case 3:
-          case 4:
-          case 5:
+          case 5: // VENTILATION
             this->mode = climate::CLIMATE_MODE_FAN_ONLY;
             break;
         }
