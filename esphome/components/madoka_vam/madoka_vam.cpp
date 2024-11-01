@@ -170,7 +170,7 @@ void MadokaVam::update() {
     return;
   }
 
-  std::vector<uint16_t> all_cmds({0x0020, 0x0030, 0x0040, 0x0050, 0x0110});
+  std::vector<uint16_t> all_cmds({0x0020, 0x0030, 0x0050, 0x0110});
   for (auto cmd : all_cmds) {
     this->query_(cmd, message({0x00, 0x00}), 50);
   }
