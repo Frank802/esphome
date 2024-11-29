@@ -102,6 +102,7 @@ class Madoka : public climate::Climate, public esphome::ble_client::BLEClientNod
     traits.set_visual_max_temperature(32);
     traits.set_visual_temperature_step(1);
     traits.set_supports_two_point_target_temperature(false);
+    traits.set_visual_current_temperature_step(1);
     traits.set_supports_current_temperature(true);
     return traits;
   }
