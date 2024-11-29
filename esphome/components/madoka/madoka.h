@@ -80,6 +80,8 @@ class Madoka : public climate::Climate, public esphome::ble_client::BLEClientNod
   void control(const climate::ClimateCall &call) override;
 
  public:
+  float outdoor_temperature;
+
   void setup() override;
   void loop() override;
   void update() override;

@@ -417,6 +417,11 @@ void Madoka::parse_cb(message msg) {
           message val(msg.begin() + i, msg.begin() + i + len);
           this->current_temperature = val[0];
         }
+        if (argument_id == 0x41) {
+          message val(msg.begin() + i, msg.begin() + i + len);
+          this->outdoor_temperature = val[0];
+          ESP_LOGI(TAG, "outdoor temperature: %d", this->outdoor_temperature);
+        }
         i += len;
       }
       break;
