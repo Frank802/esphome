@@ -37,7 +37,6 @@ void MadokaVam::control(const ClimateCall &call) {
     return;
   if (call.get_mode().has_value()) {
     ClimateMode mode = *call.get_mode();
-    std::vector<chunk> pkt;
     uint8_t mode_out = 255, status_out = 0;
     switch (mode) {
       case climate::CLIMATE_MODE_OFF:
@@ -57,20 +56,12 @@ void MadokaVam::control(const ClimateCall &call) {
     }
     this->query_(0x4020, message({0x20, 0x01, (uint8_t) status_out}), 200);
   }
-  if (call.get_target_temperature_low().has_value() && call.get_target_temperature_high().has_value()) {
-    uint16_t target_low = *call.get_target_temperature_low() * 128;
-    uint16_t target_high = *call.get_target_temperature_high() * 128;
-    this->query_(0x4040,
-                 message({0x20, 0x02, (uint8_t) ((target_high >> 8) & 0xFF), (uint8_t) (target_high & 0xFF), 0x21, 0x02,
-                          (uint8_t) ((target_low >> 8) & 0xFF), (uint8_t) (target_low & 0xFF)}),
-                 400);
-  }
   if (call.get_fan_mode().has_value()) {
     uint8_t fan_mode = call.get_fan_mode().value();
     uint8_t fan_mode_out = 255;
     switch (fan_mode) {
       case climate::CLIMATE_FAN_LOW:
-        fan_mode_out = 0;
+        fan_mode_out = 1;
         break;
       case climate::CLIMATE_FAN_HIGH:
         fan_mode_out = 5;
