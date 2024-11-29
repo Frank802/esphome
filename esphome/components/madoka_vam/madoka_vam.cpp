@@ -117,7 +117,7 @@ void MadokaVam::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t ga
     case ESP_GATTC_DISCONNECT_EVT: {
       this->node_state = espbt::ClientState::IDLE;  // ??
       this->current_temperature = NAN;
-      this->outdoor_temperature = NAN;
+      this->target_temperature = NAN;
       this->publish_state();
       break;
     }
@@ -330,10 +330,6 @@ void MadokaVam::parse_cb_(message msg) {
         if (argument_id == 0x40) {
           message val(msg.begin() + i, msg.begin() + i + len);
           this->current_temperature = val[0];
-        }
-        if (argument_id == 0x41) {
-          message val(msg.begin() + i, msg.begin() + i + len);
-          this->outdoor_temperature = val[0];
         }
         i += len;
       }

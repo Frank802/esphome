@@ -73,13 +73,10 @@ class MadokaVam : public climate::Climate, public esphome::ble_client::BLEClient
   void control(const climate::ClimateCall &call) override;
 
  public:
-  float outdoor_temperature;
-
   void setup() override;
   void loop() override;
   void update() override;
-  void gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if,
-                           esp_ble_gattc_cb_param_t *param) override;
+  void gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if, esp_ble_gattc_cb_param_t *param) override;
   void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param) override;
   void dump_config() override;
   float get_setup_priority() const override { return setup_priority::DATA; }
