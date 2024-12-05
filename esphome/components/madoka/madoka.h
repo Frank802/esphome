@@ -106,6 +106,7 @@ class Madoka : public climate::Climate, public esphome::ble_client::BLEClientNod
         climate::CLIMATE_FAN_LOW,
         climate::CLIMATE_FAN_MEDIUM,
         climate::CLIMATE_FAN_HIGH,
+        climate::CLIMATE_FAN_AUTO,
     });
 
     traits.set_visual_min_temperature(16);

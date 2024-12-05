@@ -304,6 +304,7 @@ void Madoka::parse_cb(message msg) {
       if (this->cur_status_.status) {
         switch (this->cur_status_.mode) {
           case 0:
+          case 5:
             this->mode = climate::CLIMATE_MODE_FAN_ONLY;
             break;
           case 1:
@@ -365,6 +366,9 @@ void Madoka::parse_cb(message msg) {
                     if(this->mode == climate::CLIMATE_MODE_COOL) {
                         message val(msg.begin() + i, msg.begin() + i + len);
                         switch(val[0]) {
+                            case 0: 
+                                this->fan_mode = climate::CLIMATE_FAN_AUTO;
+                                break;
                             case 1: 
                                 this->fan_mode = climate::CLIMATE_FAN_LOW;
                                 break;
@@ -387,6 +391,9 @@ void Madoka::parse_cb(message msg) {
                     if(this->mode == climate::CLIMATE_MODE_HEAT) {
                         message val(msg.begin() + i, msg.begin() + i + len);
                         switch(val[0]) {
+                            case 0: 
+                                this->fan_mode = climate::CLIMATE_FAN_AUTO;
+                                break;
                             case 1: 
                                 this->fan_mode = climate::CLIMATE_FAN_LOW;
                                 break;
