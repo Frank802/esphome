@@ -417,6 +417,7 @@ void Madoka::parse_cb(message msg) {
                 }
                 default:
                     ESP_LOGW(TAG, "[%s] Unsupported argument id: %d", this->get_name().c_str(), a_id);
+                    ESP_LOGD(TAG, "[%s] Argument value in hex: %02X", this->get_name().c_str(), a_id);
                     break;
             }
             i += len;
