@@ -390,7 +390,7 @@ void Madoka::parse_cb(message msg) {
         }
         if (a_id == 0x41) {
           message val(msg.begin() + i, msg.begin() + i + len);
-          this->outdoor_temperature = (float) (val[0] << 8 | val[1]) / 128;
+          this->outdoor_temperature = val[0];
           ESP_LOGI(TAG, "outdoor temperature: %d", this->outdoor_temperature);
         }
         i += len;
