@@ -373,7 +373,7 @@ void Madoka::parse_cb(message msg) {
                 this->fan_mode = climate::CLIMATE_FAN_HIGH;
                 break;
             default:
-                ESP_LOGW(TAG, "[%s] Unsupported fan speed", this->get_name().c_str());
+                ESP_LOGW(TAG, "[%s] Unsupported fan speed: %d", this->get_name().c_str(), val[0]);
                 break;
         }
         i += len;
