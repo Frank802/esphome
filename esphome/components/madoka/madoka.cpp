@@ -352,70 +352,34 @@ void Madoka::parse_cb(message msg) {
       }
       break;
     case BRC1H_FUNC_GET_FANSPEED:
-         ESP_LOGD(TAG, "[%s] Got fan speed return!", this->get_name().c_str());
-        // depending on current mode, we consider cooling or heating fanspeed
-        while (i < sz) {
-            uint8_t a_id = msg[i++];
-            uint8_t len = msg[i++];
-            // we need to check the current mode.
-            // if we are in HEATING, we consider heating fanspeed
-            // if we are in COOLING, we consider cooling fanspeed
-            // if auto ... ?
-            switch (a_id) {
-                case 0x20: { // Cooling FanSpeed
-                    if(this->mode == climate::CLIMATE_MODE_COOL) {
-                        message val(msg.begin() + i, msg.begin() + i + len);
-                        switch(val[0]) {
-                            case 0: 
-                                this->fan_mode = climate::CLIMATE_FAN_AUTO;
-                                break;
-                            case 1: 
-                                this->fan_mode = climate::CLIMATE_FAN_LOW;
-                                break;
-                            case 2:
-                            case 3: 
-                            case 4:
-                                this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
-                                break;
-                            case 5: 
-                                this->fan_mode = climate::CLIMATE_FAN_HIGH;
-                                break;
-                            default:
-                                ESP_LOGW(TAG, "[%s] Unsupported fan speed", this->get_name().c_str());
-                                break;
-                        }
-                    }
-                    break;
-                }
-                case 0x21: { // Heating FanSpeed
-                    if(this->mode == climate::CLIMATE_MODE_HEAT) {
-                        message val(msg.begin() + i, msg.begin() + i + len);
-                        switch(val[0]) {
-                            case 0: 
-                                this->fan_mode = climate::CLIMATE_FAN_AUTO;
-                                break;
-                            case 1: 
-                                this->fan_mode = climate::CLIMATE_FAN_LOW;
-                                break;
-                            case 2:
-                            case 3: 
-                            case 4:
-                                this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
-                                break;
-                            case 5: 
-                                this->fan_mode = climate::CLIMATE_FAN_HIGH;
-                                break;
-                            default:
-                                ESP_LOGW(TAG, "[%s] Unsupported fan speed", this->get_name().c_str());
-                                break;
-                        }
-                    }
-                    break;
-                }
-            }
-            i += len;
+      ESP_LOGD(TAG, "[%s] Got fan speed return!", this->get_name().c_str());
+      while (i < sz) {
+        uint8_t a_id = msg[i++];
+        uint8_t len = msg[i++];
+        message val(msg.begin() + i, msg.begin() + i + len);
+        ESP_LOGI(TAG, "[%s] Got fan speed: %d", this->get_name().c_str(), val[0]);
+        switch(val[0]) {
+            case 0: 
+                this->fan_mode = climate::CLIMATE_FAN_AUTO;
+                break;
+            case 1: 
+                this->fan_mode = climate::CLIMATE_FAN_LOW;
+                break;
+            case 2:
+            case 3: 
+            case 4:
+                this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
+                break;
+            case 5: 
+                this->fan_mode = climate::CLIMATE_FAN_HIGH;
+                break;
+            default:
+                ESP_LOGW(TAG, "[%s] Unsupported fan speed", this->get_name().c_str());
+                break;
         }
-        break;
+        i += len;
+      }
+      break;
     case BRC1H_FUNC_GET_SENSOR_INFORMATION:
       while (i < sz) {
         uint8_t a_id = msg[i++];
@@ -426,7 +390,7 @@ void Madoka::parse_cb(message msg) {
         }
         if (a_id == 0x41) {
           message val(msg.begin() + i, msg.begin() + i + len);
-          this->outdoor_temperature = val[0];
+          this->outdoor_temperature = (float) (val[0] << 8 | val[1]) / 128;
           ESP_LOGI(TAG, "outdoor temperature: %d", this->outdoor_temperature);
         }
         i += len;
