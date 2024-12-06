@@ -66,6 +66,9 @@ void Madoka::control(const ClimateCall &call) {
     ClimateFanMode mode = *call.get_fan_mode();
     uint8_t fan_speed_ = 255;
     switch(mode) {
+        case climate::CLIMATE_FAN_AUTO:
+            fan_speed_ = 0;
+            break;
         case climate::CLIMATE_FAN_LOW:
             fan_speed_ = 1;
             break;
@@ -172,7 +175,7 @@ void Madoka::update() {
 
   std::vector<uint16_t> all_cmds({ BRC1H_FUNC_GET_SETTING_STATUS, BRC1H_FUNC_GET_OPERATION_MODE, BRC1H_FUNC_GET_SETPOINT, BRC1H_FUNC_GET_FANSPEED, BRC1H_FUNC_GET_SENSOR_INFORMATION});
   for (auto cmd : all_cmds) {
-    this->query(cmd, message({0x00, 0x00}), 200);
+    this->query(cmd, message({0x00, 0x00}), 50);
   }
 }
 
@@ -363,9 +366,12 @@ void Madoka::parse_cb(message msg) {
             // if auto ... ?
             switch (a_id) {
                 case 0x20: { // Cooling FanSpeed
-                    if(this->mode == climate::CLIMATE_MODE_COOL) {
+                    if(this->mode != climate::CLIMATE_MODE_HEAT) {
                         message val(msg.begin() + i, msg.begin() + i + len);
                         switch(val[0]) {
+                            case 0: 
+                                this->fan_mode = climate::CLIMATE_FAN_AUTO;
+                                break;
                             case 1: 
                                 this->fan_mode = climate::CLIMATE_FAN_LOW;
                                 break;
@@ -388,6 +394,9 @@ void Madoka::parse_cb(message msg) {
                     if(this->mode == climate::CLIMATE_MODE_HEAT) {
                         message val(msg.begin() + i, msg.begin() + i + len);
                         switch(val[0]) {
+                            case 0: 
+                                this->fan_mode = climate::CLIMATE_FAN_AUTO;
+                                break;
                             case 1: 
                                 this->fan_mode = climate::CLIMATE_FAN_LOW;
                                 break;
@@ -423,6 +432,7 @@ void Madoka::parse_cb(message msg) {
         }
         if (a_id == 0x41) {
           message val(msg.begin() + i, msg.begin() + i + len);
+          ESP_LOGI(TAG, "raw values: %d %d", val[0], val[1]);
           this->outdoor_temperature = val[0];
           ESP_LOGI(TAG, "outdoor temperature: %d", this->outdoor_temperature);
         }
