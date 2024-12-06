@@ -175,7 +175,7 @@ void Madoka::update() {
 
   std::vector<uint16_t> all_cmds({ BRC1H_FUNC_GET_SETTING_STATUS, BRC1H_FUNC_GET_OPERATION_MODE, BRC1H_FUNC_GET_SETPOINT, BRC1H_FUNC_GET_FANSPEED, BRC1H_FUNC_GET_SENSOR_INFORMATION});
   for (auto cmd : all_cmds) {
-    this->query(cmd, message({0x00, 0x00}), 50);
+    this->query(cmd, message({0x00, 0x00}), 200);
   }
 }
 
@@ -432,8 +432,7 @@ void Madoka::parse_cb(message msg) {
         }
         if (a_id == 0x41) {
           message val(msg.begin() + i, msg.begin() + i + len);
-          ESP_LOGI(TAG, "raw values: %d %d", val[0], val[1]);
-          this->outdoor_temperature = val[0];
+          this->outdoor_temperature = (float) (val[0] << 8 | val[1]) / 128;
           ESP_LOGI(TAG, "outdoor temperature: %d", this->outdoor_temperature);
         }
         i += len;
