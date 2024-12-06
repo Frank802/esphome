@@ -357,7 +357,6 @@ void Madoka::parse_cb(message msg) {
         uint8_t a_id = msg[i++];
         uint8_t len = msg[i++];
         message val(msg.begin() + i, msg.begin() + i + len);
-        ESP_LOGI(TAG, "[%s] Got fan speed: %d", this->get_name().c_str(), val[0]);
         switch(val[0]) {
             case 0: 
                 this->fan_mode = climate::CLIMATE_FAN_AUTO;
