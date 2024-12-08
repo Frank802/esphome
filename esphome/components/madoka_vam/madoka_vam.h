@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include <queue>
 #include <map>
 
 #include "esphome/core/component.h"
@@ -10,38 +9,48 @@
 #include "esphome/components/esp32_ble_tracker/esp32_ble_tracker.h"
 #include "esphome/components/climate/climate.h"
 
-// #define USE_ESP32
-
 #ifdef USE_ESP32
 
 #include <esp_gattc_api.h>
 
-namespace esphome {
-namespace madoka_vam {
+#define BRC1H_FUNC_SET_SETTING_STATUS 0x4020
+#define BRC1H_FUNC_SET_OPERATION_MODE 0x4030
+#define BRC1H_FUNC_SET_SETPOINT 0x4040
+#define BRC1H_FUNC_SET_FANSPEED 0x4050
+
+#define BRC1H_FUNC_GET_SETTING_STATUS 0x0020
+#define BRC1H_FUNC_GET_OPERATION_MODE 0x0030
+#define BRC1H_FUNC_GET_SETPOINT 0x0040
+#define BRC1H_FUNC_GET_FANSPEED 0x0050
+#define BRC1H_FUNC_GET_SENSOR_INFORMATION 0x0110
 
 static const uint8_t MAX_CHUNK_SIZE = 20;
 static const uint8_t BLE_SEND_MAX_RETRIES = 5;
-static const char *const TAG = "madoka_vam";
 
-using chunk = std::vector<uint8_t>;
-using message = std::vector<uint8_t>;
+namespace esphome {
+namespace madoka_vam {
 
-struct Setpoint {
+static const char *TAG = "madoka_vam";
+
+typedef std::vector<uint8_t> chunk;
+typedef std::vector<uint8_t> message;
+
+struct setpoint {
   uint16_t cooling;
   uint16_t heating;
 };
 
-struct FanSpeed {
+struct fan_speed {
   uint8_t cooling;
   uint8_t heating;
 };
 
-struct SensorReading {
+struct sensor_reading {
   uint8_t indoor;
   uint8_t outdoor;
 };
 
-struct Status {
+struct status {
   bool status;
   uint8_t mode;
 };
@@ -56,19 +65,17 @@ namespace espbt = esphome::esp32_ble_tracker;
 
 class MadokaVam : public climate::Climate, public esphome::ble_client::BLEClientNode, public PollingComponent {
  protected:
-  bool should_update_ = false;
-  std::queue<chunk> received_chunks_ = {};
-  std::map<uint8_t, chunk> pending_chunks_ = {};
+  std::map<uint8_t, chunk> chunks = {};
   uint16_t notify_handle_;
   uint16_t wwr_handle_;
-  SemaphoreHandle_t receive_semaphore_ = nullptr;
-  Status cur_status_;
-
-  std::vector<chunk> split_payload_(message msg);
-  message prepare_message_(uint16_t cmd, message args);
-  void query_(uint16_t cmd, message args, int t_d);
-  void parse_cb_(message msg);
-  void process_incoming_chunk_(chunk chk);
+  SemaphoreHandle_t query_semaphore_ = NULL;
+  status cur_status_;
+  
+  std::vector<chunk> split_payload(message msg);
+  message prepare_message(uint16_t cmd, message args);
+  void query(uint16_t cmd, message args, int t_d);
+  void parse_cb(message msg);
+  void process_incoming_chunk(chunk chk);
 
   void control(const climate::ClimateCall &call) override;
 
@@ -80,17 +87,23 @@ class MadokaVam : public climate::Climate, public esphome::ble_client::BLEClient
   void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param) override;
   void dump_config() override;
   float get_setup_priority() const override { return setup_priority::DATA; }
+
   climate::ClimateTraits traits() override {
     auto traits = climate::ClimateTraits();
     traits.set_supported_modes({
         climate::CLIMATE_MODE_OFF,
         climate::CLIMATE_MODE_FAN_ONLY,
     });
+
     traits.set_supported_fan_modes({
         climate::CLIMATE_FAN_LOW,
+        climate::CLIMATE_FAN_MEDIUM,
         climate::CLIMATE_FAN_HIGH,
+        climate::CLIMATE_FAN_AUTO,
     });
+
     traits.set_supports_current_temperature(true);
+
     return traits;
   }
   void set_unit_of_measurement(const char *);
