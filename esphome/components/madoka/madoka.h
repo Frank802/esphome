@@ -24,11 +24,11 @@
 #define BRC1H_FUNC_GET_FANSPEED 0x0050
 #define BRC1H_FUNC_GET_SENSOR_INFORMATION 0x0110
 
-static const uint8_t MAX_CHUNK_SIZE = 20;
-static const uint8_t BLE_SEND_MAX_RETRIES = 5;
-
 namespace esphome {
 namespace madoka {
+
+static const uint8_t MAX_CHUNK_SIZE = 20;
+static const uint8_t BLE_SEND_MAX_RETRIES = 5;
 
 static const char *TAG = "madoka";
 
