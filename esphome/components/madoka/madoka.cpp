@@ -415,10 +415,18 @@ void Madoka::parse_cb(message msg) {
                     }
                     break;
                 }
-                default:
-                    ESP_LOGW(TAG, "[%s] Unsupported argument id: %d", this->get_name().c_str(), a_id);
-                    ESP_LOGD(TAG, "[%s] Argument value in hex: %02X", this->get_name().c_str(), a_id);
-                    break;
+                case 0x10:
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  break;
+                case 0x12:
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  break;
+                case 0x13:
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  break;
+                case 0x15:
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  break;
             }
             i += len;
         }
@@ -433,7 +441,7 @@ void Madoka::parse_cb(message msg) {
         }
         if (a_id == 0x41) {
           message val(msg.begin() + i, msg.begin() + i + len);
-          this->outdoor_temperature = (float) (val[0] << 8 | val[1]) / 128;
+          this->outdoor_temperature = (float) (val[0] << 8 | val[1]);
           ESP_LOGI(TAG, "outdoor temperature: %d", this->outdoor_temperature);
         }
         i += len;
