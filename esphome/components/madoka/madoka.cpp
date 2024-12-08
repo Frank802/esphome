@@ -366,7 +366,7 @@ void Madoka::parse_cb(message msg) {
             // if auto ... ?
             switch (a_id) {
                 case 0x20: { // Cooling FanSpeed
-                    if(this->mode != climate::CLIMATE_MODE_HEAT) {
+                    if(this->mode == climate::CLIMATE_MODE_COOL) {
                         message val(msg.begin() + i, msg.begin() + i + len);
                         switch(val[0]) {
                             case 0: 
