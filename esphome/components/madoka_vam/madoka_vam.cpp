@@ -383,24 +383,7 @@ void MadokaVam::parse_cb(message msg) {
                 case 0x12:
                 case 0x13:
                 case 0x15: { // Unknown Modes
-                  if(this->mode == climate::CLIMATE_MODE_FAN_ONLY) {
-                      message val(msg.begin() + i, msg.begin() + i + len);
-                      switch(val[0]) {
-                          case 0:
-                          case 1: 
-                          case 2:
-                          case 3: 
-                          case 4:
-                              this->fan_mode = climate::CLIMATE_FAN_LOW;
-                              break;
-                          case 5: 
-                              this->fan_mode = climate::CLIMATE_FAN_HIGH;
-                              break;
-                          default:
-                              ESP_LOGW(TAG, "[%s] Unsupported fan speed", this->get_name().c_str());
-                              break;
-                      }
-                  }
+                  ESP_LOGD(TAG, "[%s] Unsupported mode", this->get_name().c_str());
                   break;
               }
             }
