@@ -381,23 +381,19 @@ void MadokaVam::parse_cb(message msg) {
                 }
                 case 0x10: {
                   message val(msg.begin() + i, msg.begin() + i + len);
-                  ESP_LOGI(TAG, "[%s] Got message value %d", this->get_name().c_str(), val[0]);
-                  ESP_LOGI(TAG, "[%s] Got message float value %d", this->get_name().c_str(), (float) (val[0] << 8 | val[1]));
+                  ESP_LOGI(TAG, "[%s] Got message size %d", this->get_name().c_str(), val.length());
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
                   break;
                 }
                 case 0x12:{
-                  message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
                   break;
                 }
                 case 0x13:{
-                  message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
                   break;
                 }
                 case 0x15: {
-                  message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
                   break;
                 }
