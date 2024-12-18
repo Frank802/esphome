@@ -416,17 +416,12 @@ void Madoka::parse_cb(message msg) {
                     break;
                 }
                 case 0x10:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
-                  break;
                 case 0x12:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
-                  break;
                 case 0x13:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                case 0x15: { // Unknown Modes
+                  //ESP_LOGD(TAG, "[%s] Unsupported mode", this->get_name().c_str());
                   break;
-                case 0x15:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
-                  break;
+                }
             }
             i += len;
         }
