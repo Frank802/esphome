@@ -380,19 +380,20 @@ void MadokaVam::parse_cb(message msg) {
                     break;
                 }
                 case 0x10:
-                  if(this->mode == climate::CLIMATE_MODE_FAN_ONLY){
-                    ESP_LOGI(TAG, "[%s] FAN_ONLY", this->get_name().c_str());
-                  }
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  message val(msg.begin() + i, msg.begin() + i + len);
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
                 case 0x12:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  message val(msg.begin() + i, msg.begin() + i + len);
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
                 case 0x13:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  message val(msg.begin() + i, msg.begin() + i + len);
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
                 case 0x15:
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                  message val(msg.begin() + i, msg.begin() + i + len);
+                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
             }
             i += len;
