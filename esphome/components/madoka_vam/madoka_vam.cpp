@@ -379,24 +379,30 @@ void MadokaVam::parse_cb(message msg) {
                     }
                     break;
                 }
-                case 0x10: {
-                  message val(msg.begin() + i, msg.begin() + i + len);
-                  ESP_LOGI(TAG, "[%s] Got message size %d", this->get_name().c_str(), val.length());
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
+                case 0x10:
+                case 0x12:
+                case 0x13:
+                case 0x15: { // Unknown Modes
+                  if(this->mode == climate::CLIMATE_FAN_ONLY) {
+                      message val(msg.begin() + i, msg.begin() + i + len);
+                      switch(val[0]) {
+                          case 0:
+                          case 1: 
+                          case 2:
+                          case 3: 
+                          case 4:
+                              this->fan_mode = climate::CLIMATE_FAN_LOW;
+                              break;
+                          case 5: 
+                              this->fan_mode = climate::CLIMATE_FAN_HIGH;
+                              break;
+                          default:
+                              ESP_LOGW(TAG, "[%s] Unsupported fan speed", this->get_name().c_str());
+                              break;
+                      }
+                  }
                   break;
-                }
-                case 0x12:{
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
-                  break;
-                }
-                case 0x13:{
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
-                  break;
-                }
-                case 0x15: {
-                  ESP_LOGI(TAG, "[%s] Got unknown mode %02X", this->get_name().c_str(), a_id);
-                  break;
-                }
+              }
             }
             i += len;
         }
