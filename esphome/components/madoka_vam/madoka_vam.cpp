@@ -383,7 +383,7 @@ void MadokaVam::parse_cb(message msg) {
                 case 0x12:
                 case 0x13:
                 case 0x15: { // Unknown Modes
-                  if(this->mode == climate::CLIMATE_FAN_ONLY) {
+                  if(this->mode == climate::CLIMATE_MODE_FAN_ONLY) {
                       message val(msg.begin() + i, msg.begin() + i + len);
                       switch(val[0]) {
                           case 0:
