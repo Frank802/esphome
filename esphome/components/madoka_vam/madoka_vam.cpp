@@ -383,7 +383,7 @@ void MadokaVam::parse_cb(message msg) {
                 case 0x12:
                 case 0x13:
                 case 0x15: { // Unknown Modes
-                  ESP_LOGD(TAG, "[%s] Unsupported mode", this->get_name().c_str());
+                  //ESP_LOGD(TAG, "[%s] Unsupported mode", this->get_name().c_str());
                   break;
               }
             }
