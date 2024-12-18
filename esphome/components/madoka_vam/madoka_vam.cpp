@@ -379,22 +379,26 @@ void MadokaVam::parse_cb(message msg) {
                     }
                     break;
                 }
-                case 0x10:
+                case 0x10: {
                   message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
-                case 0x12:
+                }
+                case 0x12:{
                   message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
-                case 0x13:
+                }
+                case 0x13:{
                   message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
-                case 0x15:
+                }
+                case 0x15: {
                   message val(msg.begin() + i, msg.begin() + i + len);
                   ESP_LOGI(TAG, "[%s] Got unknown mode %02X and fan value %d", this->get_name().c_str(), a_id, val[0]);
                   break;
+                }
             }
             i += len;
         }
