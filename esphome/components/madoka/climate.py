@@ -12,15 +12,10 @@ Madoka = madoka_ns.class_(
 )
 
 CONFIG_SCHEMA = (
-    climate.CLIMATE_SCHEMA.extend(
-        {
-            cv.GenerateID(): cv.declare_id(Madoka),
-        }
-    )
+    climate.climate_schema(Madoka)
     .extend(ble_client.BLE_CLIENT_SCHEMA)
     .extend(cv.polling_component_schema("10s"))
 )
-
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
