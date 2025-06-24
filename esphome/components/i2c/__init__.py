@@ -1,29 +1,30 @@
+from esphome import pins
 import esphome.codegen as cg
 import esphome.config_validation as cv
-import esphome.final_validate as fv
-from esphome import pins
 from esphome.const import (
+    CONF_ADDRESS,
     CONF_FREQUENCY,
-    CONF_TIMEOUT,
+    CONF_I2C_ID,
     CONF_ID,
     CONF_INPUT,
     CONF_OUTPUT,
     CONF_SCAN,
     CONF_SCL,
     CONF_SDA,
-    CONF_ADDRESS,
-    CONF_I2C_ID,
+    CONF_TIMEOUT,
     PLATFORM_ESP32,
     PLATFORM_ESP8266,
     PLATFORM_RP2040,
 )
-from esphome.core import coroutine_with_priority, CORE
+from esphome.core import CORE, coroutine_with_priority
+import esphome.final_validate as fv
 
 CODEOWNERS = ["@esphome/core"]
 i2c_ns = cg.esphome_ns.namespace("i2c")
 I2CBus = i2c_ns.class_("I2CBus")
-ArduinoI2CBus = i2c_ns.class_("ArduinoI2CBus", I2CBus, cg.Component)
-IDFI2CBus = i2c_ns.class_("IDFI2CBus", I2CBus, cg.Component)
+InternalI2CBus = i2c_ns.class_("InternalI2CBus", I2CBus)
+ArduinoI2CBus = i2c_ns.class_("ArduinoI2CBus", InternalI2CBus, cg.Component)
+IDFI2CBus = i2c_ns.class_("IDFI2CBus", InternalI2CBus, cg.Component)
 I2CDevice = i2c_ns.class_("I2CDevice")
 
 
@@ -71,6 +72,7 @@ CONFIG_SCHEMA = cv.All(
 @coroutine_with_priority(1.0)
 async def to_code(config):
     cg.add_global(i2c_ns.using)
+    cg.add_define("USE_I2C")
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
